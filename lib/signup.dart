@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:adopt_uas/login.dart';
 import 'package:flutter/material.dart';
-import 'package:adopt_uas/main.dart';
 import 'package:http/http.dart' as http;
 
 String _user_name = "";
