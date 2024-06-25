@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           error_signup = "Insert your username and password";
         });
-        Login();
+        LoginForm();
       } else {
         setState(() {
           error_signup = "Registration Error";
@@ -47,7 +47,7 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Container(
-        height: 300,
+        height: 310,
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(

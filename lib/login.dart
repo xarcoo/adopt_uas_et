@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Container(
-        height: 300,
+        height: 380,
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
