@@ -29,7 +29,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final _formKey = GlobalKey<FormState>();
   void doSignup() async {
     final response = await http.post(
       Uri.parse("https://ubaya.me/flutter/160421050/uas/new_user.php"),
@@ -79,9 +78,10 @@ class _SignUpState extends State<SignUp> {
                   _user_name = v;
                 },
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Username',
-                    hintText: 'Enter username'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Username',
+                  hintText: 'Enter username',
+                ),
               ),
             ),
             Padding(
@@ -92,9 +92,10 @@ class _SignUpState extends State<SignUp> {
                 },
                 obscureText: true,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter secure password'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  hintText: 'Enter secure password',
+                ),
               ),
             ),
             Padding(
@@ -110,11 +111,6 @@ class _SignUpState extends State<SignUp> {
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState != null &&
-                        !_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please fix your input(s)')));
-                    }
                     doSignup();
                   },
                   style: ButtonStyle(

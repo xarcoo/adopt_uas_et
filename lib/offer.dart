@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 
-class Offer extends StatelessWidget{
+class Offer extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return OfferState();
+  }
+}
+
+class OfferState extends State<Offer> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Offer"),
-      // ),
+      appBar: AppBar(
+        title: Text("Offer"),
+      ),
       body: Center(
         child: Text("This is Offer."),
       ),
     );
   }
-
 }

@@ -81,9 +81,10 @@ class _LoginState extends State<Login> {
                   _user_name = v;
                 },
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Username',
-                    hintText: 'Enter username'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Username',
+                  hintText: 'Enter username',
+                ),
               ),
             ),
             Padding(
@@ -94,9 +95,10 @@ class _LoginState extends State<Login> {
                 },
                 obscureText: true,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter secure password'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  hintText: 'Enter secure password',
+                ),
               ),
             ),
             Padding(
