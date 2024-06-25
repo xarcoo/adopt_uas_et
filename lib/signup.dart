@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 String _user_name = "";
 String _user_password = "";
-String error_login = "Insert your username and password";
+String error_signup = "Insert your username and password";
 
 class SignUp extends StatefulWidget {
   @override
@@ -26,12 +26,12 @@ class _SignUpState extends State<SignUp> {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         setState(() {
-          error_login = "Insert your username and password";
+          error_signup = "Insert your username and password";
         });
         Login();
       } else {
         setState(() {
-          error_login = "Registration Error";
+          error_signup = "Registration Error";
         });
       }
     } else {
