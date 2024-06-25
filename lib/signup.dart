@@ -8,6 +8,19 @@ String _user_name = "";
 String _user_password = "";
 String error_signup = "Insert your username and password";
 
+class SignUpForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SIGN UP',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: SignUp(),
+    );
+  }
+}
+
 class SignUp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,6 +29,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final _formKey = GlobalKey<FormState>();
   void doSignup() async {
     final response = await http.post(
       Uri.parse("https://ubaya.me/flutter/160421050/uas/new_user.php"),
@@ -28,7 +42,8 @@ class _SignUpState extends State<SignUp> {
         setState(() {
           error_signup = "Insert your username and password";
         });
-        LoginForm();
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginForm()));
       } else {
         setState(() {
           error_signup = "Registration Error";
@@ -47,7 +62,7 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Container(
-        height: 310,
+        height: 380,
         margin: EdgeInsets.all(20),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -95,6 +110,11 @@ class _SignUpState extends State<SignUp> {
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: ElevatedButton(
                   onPressed: () {
+                    if (_formKey.currentState != null &&
+                        !_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Please fix your input(s)')));
+                    }
                     doSignup();
                   },
                   style: ButtonStyle(
@@ -102,6 +122,28 @@ class _SignUpState extends State<SignUp> {
                   ),
                   child: Text(
                     'SIGN UP',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Container(
+                height: 50,
+                width: 300,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginForm()));
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Color(0xd0bcff)),
+                  ),
+                  child: Text(
+                    'LOGIN',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),

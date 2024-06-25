@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
                     backgroundColor: MaterialStateProperty.all(Color(0xd0bcff)),
                   ),
                   child: Text(
-                    'Login',
+                    'LOGIN',
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
@@ -134,7 +134,7 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUp()));
+                        MaterialPageRoute(builder: (context) => SignUpForm()));
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Color(0xd0bcff)),
