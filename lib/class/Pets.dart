@@ -4,11 +4,12 @@ class Pets {
   String jenis;
   String keterangan;
   String foto;
-  int? is_adopt;
+  int is_adopt;
   final String? adopter;
   final String owner;
+  final int likes;
 
-  Pets({required this.id, this.nama, required this.jenis, required this.keterangan, required this.foto, this.is_adopt, this.adopter, required this.owner});
+  Pets({required this.id, this.nama, required this.jenis, required this.keterangan, required this.foto, required this.is_adopt, this.adopter, required this.owner, required this.likes});
   
   factory Pets.fromJson(Map<String, dynamic> json){
     return Pets(
@@ -16,7 +17,10 @@ class Pets {
         jenis: json['jenis'] as String,
         keterangan: json['keterangan'] as String,
         foto: json['foto'] as String,
-        owner: json['owner'] as String
+        adopter: json['adopter'] as String?,
+        is_adopt: json['is_adopt'] as int,
+        owner: json['owner'] as String,
+      likes: json['likes'] as int
     );
   }
 }

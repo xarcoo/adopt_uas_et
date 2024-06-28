@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adopt_uas/propose.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'class/Pets.dart';
@@ -79,13 +80,20 @@ class BrowseState extends State<Browse> {
             children: <Widget>[
               ListTile(
                 leading: Image.network(listPet2[index].foto),
-                title: GestureDetector(
-                  child: Text(listPet2[index].jenis),
-                  onTap: () {
-
+                title: Text(listPet2[index].jenis),
+                subtitle: Text(listPet2[index].keterangan + "\n" + "likes: " + listPet2[index].likes.toString()),
+                trailing: ElevatedButton(
+                  child: Text('Propose'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            Propose(petID: listPet2[index].id),
+                      ),
+                    );
                   },
-                ),
-                subtitle: Text(listPet2[index].keterangan),
+                )
               )
             ],
           ),
@@ -96,7 +104,7 @@ class BrowseState extends State<Browse> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("https://ubaya.me/flutter/160421050/uas/pet_list.php"),
+        Uri.parse("https://ubaya.me/flutter/160421050/uas/pet_list_no_adopt.php"),
         body: {'cari': _txtCari}
     );
 
@@ -106,17 +114,5 @@ class BrowseState extends State<Browse> {
     else{
       throw Exception("Failed to read API");
     }
-  }
-
-  bacaData() {
-    pets.clear();
-    Future<String> data = fetchData();
-    data.then((value) {
-      Map json = jsonDecode(value);
-      for(var pet1 in json['data']){
-        Pets pet = Pets.fromJson(pet1);
-        pets.add(pet);
-      }
-    });
   }
 }

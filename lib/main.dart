@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
       routes: {
         'home': (context) => Home(),
         'browse': (context) => Browse(),
-        'offer': (context) => Offer(),
+        'offer': (context) => Offer(username: active_user,),
         'adopt': (context) => Adopt(),
         'login': (context) => LoginForm(),
       },
