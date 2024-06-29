@@ -16,6 +16,7 @@ class Offer extends StatefulWidget {
 }
 
 class OfferState extends State<Offer> {
+  Pets? _pets;
   @override
   void initState() {
     super.initState();
@@ -94,7 +95,7 @@ class OfferState extends State<Offer> {
                         builder: (context) =>
                             Decision(petID: listPet2[index].id,),
                       ),
-                    );
+                    ).then(onGoBack);
                   },
                 ) // Example trailing widget
                     : null,
@@ -118,6 +119,21 @@ class OfferState extends State<Offer> {
     else{
       throw Exception("Failed to read API");
     }
+  }
+
+  Future onGoBack(dynamic value) async {
+    //  print("masuk goback");
+    setState(() {
+      bacaData();
+    });
+  }
+
+  bacaData() {
+    fetchData().then((value) {
+      Map json = jsonDecode(value);
+      _pets = Pets.fromJson(json['data']);
+      setState(() {});
+    });
   }
 
   newOffers() {
