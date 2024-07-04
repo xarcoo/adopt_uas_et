@@ -85,26 +85,67 @@ class OfferState extends State<Offer> {
                 leading: Image.network(listPet2[index].foto),
                 title: Text(listPet2[index].jenis),
                 subtitle: Text(listPet2[index].keterangan + "\n" + "likes: " + listPet2[index].likes.toString() + adopter),
-                trailing: listPet2[index].is_adopt == 0
-                    ? ElevatedButton(
-                  child: Text('Decision'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            Decision(petID: listPet2[index].id,),
-                      ),
-                    ).then(onGoBack);
-                  },
-                ) // Example trailing widget
-                    : null,
+                trailing: Column(
+                  children: [
+                    GenerateBtnDec(data, index),
+                  ]
+                ),
               )
             ],
           ),
         );
       },
     );
+  }
+
+  Widget GenerateBtnDec(data, index){
+    List<Pets> listPet2 = [];
+    Map json = jsonDecode(data);
+    for(var pets in json['data']){
+      Pets pet = Pets.fromJson(pets);
+      listPet2.add(pet);
+    }
+    if(listPet2[index].is_adopt == 0){
+      return new ElevatedButton(
+        child: Text('Decision'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Decision(petID: listPet2[index].id,),
+            ),
+          ).then(onGoBack);
+        },
+      );
+    } else {
+      return Text("");
+    }
+  }
+
+  Widget GenerateBtnEdit(data, index){
+    List<Pets> listPet2 = [];
+    Map json = jsonDecode(data);
+    for(var pets in json['data']){
+      Pets pet = Pets.fromJson(pets);
+      listPet2.add(pet);
+    }
+    if(listPet2[index].likes == 0){
+      return new ElevatedButton(
+        child: Text('Decision'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  Decision(petID: listPet2[index].id,),
+            ),
+          ).then(onGoBack);
+        },
+      );
+    } else {
+      return Text("");
+    }
   }
 
   Future<String> fetchData() async {
@@ -141,7 +182,7 @@ class OfferState extends State<Offer> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => newOffer(),
+          builder: (context) => NewOffer(),
         ),
       );
     });
