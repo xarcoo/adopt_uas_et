@@ -1,8 +1,8 @@
 class Pets {
   final int id;
   late final String? nama;
-  final String jenis;
-  final String keterangan;
+  late final String jenis;
+  late final String keterangan;
   final String foto;
   final int? is_adopt;
   final String? adopter;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:adopt_uas/class/Pets.dart';
 import 'package:adopt_uas/decision.dart';
+import 'package:adopt_uas/editOffer.dart';
 import 'package:adopt_uas/newOffer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -78,21 +79,28 @@ class OfferState extends State<Offer> {
         }
 
         return new Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Image.network(listPet2[index].foto),
-                title: Text(listPet2[index].jenis),
-                subtitle: Text(listPet2[index].keterangan + "\n" + "likes: " + listPet2[index].likes.toString() + adopter),
-                trailing: Column(
-                  children: [
-                    GenerateBtnDec(data, index),
-                  ]
-                ),
-              )
-            ],
-          ),
+          child: Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Image.network(listPet2[index].foto,),
+                    title: Text(listPet2[index].jenis),
+                    subtitle: Text(listPet2[index].keterangan + "\n" + "likes: " + listPet2[index].likes.toString() + adopter),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GenerateBtnDec(data, index),
+                        GenerateBtnEdit(data, index),
+                        GenerateBtnDelete(data, index)
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          )
         );
       },
     );
@@ -106,7 +114,9 @@ class OfferState extends State<Offer> {
       listPet2.add(pet);
     }
     if(listPet2[index].is_adopt == 0){
-      return new ElevatedButton(
+      return new Padding(
+          padding: EdgeInsets.only(bottom: 3),
+      child: ElevatedButton(
         child: Text('Decision'),
         onPressed: () {
           Navigator.push(
@@ -117,7 +127,7 @@ class OfferState extends State<Offer> {
             ),
           ).then(onGoBack);
         },
-      );
+      ));
     } else {
       return Text("");
     }
@@ -132,7 +142,32 @@ class OfferState extends State<Offer> {
     }
     if(listPet2[index].likes == 0){
       return new ElevatedButton(
-        child: Text('Decision'),
+        child: Text('Edit'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  EditOffer(petID: listPet2[index].id,),
+            ),
+          ).then(onGoBack);
+        },
+      );
+    } else {
+      return Text("");
+    }
+  }
+
+  Widget GenerateBtnDelete(data, index){
+    List<Pets> listPet2 = [];
+    Map json = jsonDecode(data);
+    for(var pets in json['data']){
+      Pets pet = Pets.fromJson(pets);
+      listPet2.add(pet);
+    }
+    if(listPet2[index].likes == 0){
+      return new ElevatedButton(
+        child: Text('Delete'),
         onPressed: () {
           Navigator.push(
             context,
