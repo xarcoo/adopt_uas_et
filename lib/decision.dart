@@ -25,13 +25,14 @@ class DecisionState extends State<Decision> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Decision"),
-      ),
-      body: ListView(children: <Widget>[
-        tampilDataPet(),
-      ],)
-    );
+        appBar: AppBar(
+          title: Text("Decision"),
+        ),
+        body: ListView(
+          children: <Widget>[
+            tampilDataPet(),
+          ],
+        ));
   }
 
   Future<String> fetchDataPet() async {
@@ -53,8 +54,8 @@ class DecisionState extends State<Decision> {
     });
   }
 
-  Widget tampilDataPet(){
-    if(_pets == null){
+  Widget tampilDataPet() {
+    if (_pets == null) {
       return const CircularProgressIndicator();
     }
     return Column(
@@ -62,18 +63,25 @@ class DecisionState extends State<Decision> {
         Card(
           elevation: 10,
           margin: EdgeInsets.all(10),
-          child: Column(children: <Widget>[
-            Text(_pets!.nama.toString(), style: const TextStyle(fontSize: 25)),
-            Text(_pets!.jenis.toString(), style: const TextStyle(fontSize: 15)),
-            Image.network(_pets!.foto, scale: 5,),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(_pets!.keterangan),
-            ),
-          ],),
+          child: Column(
+            children: <Widget>[
+              Text(_pets!.nama.toString(),
+                  style: const TextStyle(fontSize: 25)),
+              Text(_pets!.jenis.toString(),
+                  style: const TextStyle(fontSize: 15)),
+              Image.network(
+                "https://ubaya.me/flutter/160421050/uas/images/${_pets!.id}.jpg",
+                scale: 5,
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(_pets!.keterangan),
+              ),
+            ],
+          ),
         ),
         Padding(
-            padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: ListView.builder(
               shrinkWrap: true,
               itemCount: _pets?.user_tertarik?.length,
@@ -88,7 +96,8 @@ class DecisionState extends State<Decision> {
                         trailing: ElevatedButton(
                           child: Text("Choose Adopter"),
                           onPressed: () {
-                            insertAdopter(_pets?.user_tertarik?[index]['username']);
+                            insertAdopter(
+                                _pets?.user_tertarik?[index]['username']);
                             Navigator.of(context).pop();
                           },
                         ),
@@ -96,8 +105,7 @@ class DecisionState extends State<Decision> {
                     ],
                   ),
                 );
-              }
-          ),
+              }),
         )
       ],
     );

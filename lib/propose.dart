@@ -8,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Propose extends StatefulWidget {
   int petID;
-  Propose({super.key, required this.petID});
+  String username;
+  Propose({super.key, required this.petID, required this.username});
   @override
   State<StatefulWidget> createState() {
     return ProposeState();
@@ -26,40 +27,36 @@ class ProposeState extends State<Propose> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Propose"),
-      ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Keterangan',
-                ),
-                onChanged: (value) {
-                  keterangan = value;
-                }
-              )
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                if (keterangan == "") {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Harap Isian diperbaiki')));
-                }
-                else {
-                  submit();
-                }
-              },
-              child: Text('Submit'),
+        appBar: AppBar(
+          title: Text("Propose"),
+        ),
+        body: Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Keterangan',
+                    ),
+                    onChanged: (value) {
+                      keterangan = value;
+                    })),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (keterangan == "") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Harap Isian diperbaiki')));
+                  } else {
+                    submit();
+                  }
+                },
+                child: Text('Submit'),
+              ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 
   String user_name = "";
@@ -71,12 +68,13 @@ class ProposeState extends State<Propose> {
 
   void submit() async {
     checkUser();
-    final response = await http
-        .post(Uri.parse("https://ubaya.me/flutter/160421050/uas/new_propose.php"), body: {
-      'user_name': user_name,
-      'id_pet': widget.petID.toString(),
-      'keterangan': keterangan,
-    });
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/flutter/160421050/uas/new_propose.php"),
+        body: {
+          'user_name': user_name,
+          'id_pet': widget.petID.toString(),
+          'keterangan': keterangan,
+        });
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
@@ -88,7 +86,7 @@ class ProposeState extends State<Propose> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Browse(),
+              builder: (context) => Browse(username: widget.username),
             ),
           );
         });

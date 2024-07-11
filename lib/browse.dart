@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'class/Pets.dart';
 
 class Browse extends StatefulWidget {
+  String username;
+  Browse({super.key, required this.username});
   @override
   State<StatefulWidget> createState() {
     return BrowseState();
@@ -21,22 +23,11 @@ class BrowseState extends State<Browse> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Browse"),
-      ),
+        appBar: AppBar(
+          title: Text("Browse"),
+        ),
         body: ListView(
           children: <Widget>[
-            TextFormField(
-              decoration: const InputDecoration(
-                  icon: Icon(Icons.search),
-                  labelText: "Search Pet"
-              ),
-              onFieldSubmitted: (value) {
-                setState(() {
-                  _txtCari = value;
-                });
-              },
-            ),
             Container(
               height: MediaQuery.of(context).size.height - 200,
               child: FutureBuilder(
@@ -57,17 +48,16 @@ class BrowseState extends State<Browse> {
               ),
             )
           ],
-        )
-    );
+        ));
   }
 
   List<Pets> pets = [];
   String _txtCari = "";
 
-  Widget DaftarPet(data){
+  Widget DaftarPet(data) {
     List<Pets> listPet2 = [];
     Map json = jsonDecode(data);
-    for(var pets in json['data']){
+    for (var pets in json['data']) {
       Pets pet = Pets.fromJson(pets);
       listPet2.add(pet);
     }
@@ -79,22 +69,27 @@ class BrowseState extends State<Browse> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Image.network(listPet2[index].foto),
-                title: Text(listPet2[index].jenis),
-                subtitle: Text(listPet2[index].keterangan + "\n" + "likes: " + listPet2[index].likes.toString()),
-                trailing: ElevatedButton(
-                  child: Text('Propose'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            Propose(petID: listPet2[index].id),
-                      ),
-                    );
-                  },
-                )
-              )
+                  leading: Image.network(
+                      "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
+                  title: Text(listPet2[index].nama),
+                  subtitle: Text(listPet2[index].keterangan +
+                      "\n" +
+                      "likes: " +
+                      listPet2[index].likes.toString()),
+                  trailing: ElevatedButton(
+                    child: Text('Propose'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Propose(
+                            petID: listPet2[index].id,
+                            username: widget.username,
+                          ),
+                        ),
+                      );
+                    },
+                  ))
             ],
           ),
         );
@@ -104,14 +99,13 @@ class BrowseState extends State<Browse> {
 
   Future<String> fetchData() async {
     final response = await http.post(
-        Uri.parse("https://ubaya.me/flutter/160421050/uas/pet_list_no_adopt.php"),
-        body: {'cari': _txtCari}
-    );
+        Uri.parse(
+            "https://ubaya.me/flutter/160421050/uas/pet_list_no_adopt.php"),
+        body: {'owner': widget.username});
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       return response.body;
-    }
-    else{
+    } else {
       throw Exception("Failed to read API");
     }
   }

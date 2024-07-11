@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:adopt_uas/class/Types.dart';
 import 'package:adopt_uas/offer.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class NewOffer extends StatefulWidget {
-  const NewOffer({super.key});
+  String username;
+  NewOffer({super.key, required this.username});
 
   @override
   State<NewOffer> createState() => _NewOfferState();
@@ -19,16 +19,67 @@ class NewOffer extends StatefulWidget {
 
 class _NewOfferState extends State<NewOffer> {
   final _formKey = GlobalKey<FormState>();
-  String _jenis = "";
+  int _jenis = 1;
   String _nama = "";
   String _keterangan = "";
   File? _image;
   File? _imageProses;
 
+  Widget comboType = Text("Jenis Hewan");
+
+  void generateComboType() {
+    List<Types> types;
+    var data = daftarType();
+    data.then((value) {
+      types = List<Types>.from(value.map((i) {
+        return Types.fromJson(i);
+      }));
+      setState(() {
+        comboType = DropdownButton(
+          dropdownColor: Colors.grey[100],
+          hint: Text("Jenis Hewan"),
+          isDense: false,
+          items: types.map((type) {
+            return DropdownMenuItem(
+              child: Column(
+                children: <Widget>[
+                  Text(type.name, overflow: TextOverflow.visible),
+                ],
+              ),
+              value: type.id,
+            );
+          }).toList(),
+          onChanged: (value) {
+            _jenis = value!;
+          },
+        );
+      });
+    });
+  }
+
+  Future<List> daftarType() async {
+    Map json;
+    final response = await http
+        .post(Uri.parse("https://ubaya.me/flutter/160421050/uas/typelist.php"));
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      json = jsonDecode(response.body);
+      return json['data'];
+    } else {
+      throw Exception('Failed to read API');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    generateComboType();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Scaffold(
       appBar: AppBar(
         title: Text("New Offer"),
@@ -39,27 +90,12 @@ class _NewOfferState extends State<NewOffer> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(10),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Jenis Hewan"
-                ),
-                onChanged: (value) {
-                  _jenis = value;
-                },
-                validator: (value) {
-                  if(value == null || value.isEmpty){
-                    return "Jenis hewan tidak boleh kosong";
-                  }
-                  return null;
-                },
-              ),
+              child: comboType,
             ),
             Padding(
               padding: EdgeInsets.all(10),
               child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: "Nama Hewan"
-                ),
+                decoration: InputDecoration(labelText: "Nama Hewan"),
                 onChanged: (value) {
                   _nama = value;
                 },
@@ -68,14 +104,12 @@ class _NewOfferState extends State<NewOffer> {
             Padding(
               padding: EdgeInsets.all(10),
               child: TextFormField(
-                decoration: InputDecoration(
-                    labelText: "Keterangan Hewan"
-                ),
+                decoration: InputDecoration(labelText: "Keterangan Hewan"),
                 onChanged: (value) {
                   _keterangan = value;
                 },
                 validator: (value) {
-                  if(value == null || value.isEmpty){
+                  if (value == null || value.isEmpty) {
                     return "Keterangan hewan tidak boleh kosong";
                   }
                   return null;
@@ -88,9 +122,13 @@ class _NewOfferState extends State<NewOffer> {
                   onTap: () {
                     _showPicker(context);
                   },
-                  child: _imageProses != null ? Image.file(_imageProses!, scale: 3,) : Text("Choose Image"),
-                )
-            ),
+                  child: _imageProses != null
+                      ? Image.file(
+                          _imageProses!,
+                          scale: 3,
+                        )
+                      : Image.network("https://ubaya.me/blank.jpg"),
+                )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
@@ -99,8 +137,7 @@ class _NewOfferState extends State<NewOffer> {
                       !_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Harap Isian diperbaiki')));
-                  }
-                  else {
+                  } else {
                     submit();
                   }
                 },
@@ -113,37 +150,61 @@ class _NewOfferState extends State<NewOffer> {
     );
   }
 
-  String user_name = "";
-
-  void checkUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    user_name = prefs.getString("user_name") ?? '';
-  }
-
-  void submit() async{
+  void submit() async {
     final response = await http.post(
       Uri.parse("https://ubaya.me/flutter/160421050/uas/new_pet.php"),
       body: {
-        'jenis': _jenis,
-        'nama' : _nama,
+        'jenis': _jenis.toString(),
+        'nama': _nama,
         'keterangan': _keterangan,
-        'owner': user_name
-      });
-    if(response.statusCode == 200){
+        'owner': widget.username
+      },
+    );
+    if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
-      if(json['result'] == 'success'){
-        if(!mounted) return;
+      String id = json['id'].toString();
+      if (json['result'] == 'success') {
+        if (!mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
 
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Offer(username: user_name,),
+        if (_imageProses == null) return;
+        List<int> imageBytes = _imageProses!.readAsBytesSync();
+        String base64Image = base64Encode(imageBytes);
+
+        final response2 = await http.post(
+          Uri.parse(
+              'https://ubaya.me/flutter/160421050/uas/uploadpetphoto.php'),
+          body: {
+            'id': id,
+            'image': base64Image,
+          },
+        );
+        if (response2.statusCode == 200) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response2.body),
             ),
           );
-        });
+          Navigator.of(context).pop();
+        }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Offer(
+              username: widget.username,
+            ),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text("${_jenis}, ${_nama}, ${_keterangan}, ${widget.username}"),
+          ),
+        );
       }
     }
   }
@@ -197,7 +258,7 @@ class _NewOfferState extends State<NewOffer> {
   _imgKamera() async {
     final picker = ImagePicker();
     final image =
-    await picker.pickImage(source: ImageSource.camera, imageQuality: 20);
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 20);
     if (image == null) return;
     setState(() {
       _image = File(image.path);
@@ -213,8 +274,6 @@ class _NewOfferState extends State<NewOffer> {
       _imageProses = File(filePath);
       img.Image? temp = img.readJpg(_image!.readAsBytesSync());
       img.Image temp2 = img.copyResize(temp!, width: 480, height: 640);
-      img.drawString(temp2, img.arial_24, 4, 4, 'Kuliah Flutter',
-          color: img.getColor(250, 100, 100));
       setState(() {
         _imageProses?.writeAsBytesSync(img.writeJpg(temp2));
       });

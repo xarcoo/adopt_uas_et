@@ -28,9 +28,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         'home': (context) => Home(),
-        'browse': (context) => Browse(),
-        'offer': (context) => Offer(username: active_user,),
-        'adopt': (context) => Adopt(),
+        'browse': (context) => Browse(
+              username: active_user,
+            ),
+        'offer': (context) => Offer(
+              username: active_user,
+            ),
+        'adopt': (context) => Adopt(
+              username: active_user,
+            ),
         'login': (context) => LoginForm(),
       },
       home: const HomePage(title: 'Home Page'),
