@@ -127,7 +127,10 @@ class _NewOfferState extends State<NewOffer> {
                           _imageProses!,
                           scale: 3,
                         )
-                      : Image.network("https://ubaya.me/blank.jpg"),
+                      : Image.network(
+                          "https://ubaya.me/blank.jpg",
+                          scale: 3,
+                        ),
                 )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),

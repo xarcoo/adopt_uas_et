@@ -128,7 +128,10 @@ class _EditOfferState extends State<EditOffer> {
                           _imageProses!,
                           scale: 3,
                         )
-                      : Image.network("https://ubaya.me/blank.jpg"),
+                      : Image.network(
+                          "https://ubaya.me/flutter/160421050/uas/images/${widget.petID}.jpg",
+                          scale: 3,
+                        ),
                 )),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),

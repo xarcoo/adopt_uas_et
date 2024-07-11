@@ -75,7 +75,7 @@ class OfferState extends State<Offer> {
       itemCount: listPet2.length,
       itemBuilder: (BuildContext context, int index) {
         if (listPet2[index].adopter != null) {
-          adopter = ", adopter = " + listPet2[index].adopter.toString();
+          adopter = ", Adopter: " + listPet2[index].adopter.toString();
         }
 
         return Card(
@@ -89,14 +89,17 @@ class OfferState extends State<Offer> {
                         "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
                     title: Text(listPet2[index].nama.toString()),
                     subtitle: Text(
-                        "${listPet2[index].keterangan}\nlikes: ${listPet2[index].likes}$adopter"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GenerateBtnDec(data, index),
-                        GenerateBtnEdit(data, index),
-                        GenerateBtnDelete(data, index)
-                      ],
+                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}$adopter"),
+                    trailing: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GenerateBtnDec(data, index),
+                          GenerateBtnEdit(data, index),
+                          GenerateBtnDelete(data, index)
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -116,21 +119,19 @@ class OfferState extends State<Offer> {
       listPet2.add(pet);
     }
     if (listPet2[index].is_adopt == 0) {
-      return Padding(
-          padding: EdgeInsets.only(bottom: 3),
-          child: ElevatedButton(
-            child: Text('Decision'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Decision(
-                    petID: listPet2[index].id,
-                  ),
-                ),
-              ).then(onGoBack);
-            },
-          ));
+      return ElevatedButton(
+        child: Text('Decision'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Decision(
+                petID: listPet2[index].id,
+              ),
+            ),
+          ).then(onGoBack);
+        },
+      );
     } else {
       return Text("");
     }

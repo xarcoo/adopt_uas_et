@@ -85,59 +85,59 @@ class AdoptState extends State<Adopt> {
                         ),
                       ),
                     )
-                  : Text(""),
-              cmbVal == "Propose Ditolak"
-                  ? Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height - 200,
-                        child: FutureBuilder(
-                          future: fetchTolak(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.hasError) {
-                                return Text("Error! ${snapshot.error}");
-                              } else if (snapshot.hasData) {
-                                return DaftarPet(snapshot.data.toString());
-                              } else {
-                                return const Text("No data");
-                              }
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      ),
-                    )
-                  : Text(""),
-              cmbVal == "Propose Disetujui"
-                  ? Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height - 200,
-                        child: FutureBuilder(
-                          future: fetchSetuju(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.hasError) {
-                                return Text("Error! ${snapshot.error}");
-                              } else if (snapshot.hasData) {
-                                return DaftarPet(snapshot.data.toString());
-                              } else {
-                                return const Text("No data");
-                              }
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          },
-                        ),
-                      ),
-                    )
-                  : Text(""),
+                  : cmbVal == "Propose Ditolak"
+                      ? Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height - 200,
+                            child: FutureBuilder(
+                              future: fetchTolak(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.hasError) {
+                                    return Text("Error! ${snapshot.error}");
+                                  } else if (snapshot.hasData) {
+                                    return DaftarPet(snapshot.data.toString());
+                                  } else {
+                                    return const Text("No data");
+                                  }
+                                } else {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              },
+                            ),
+                          ),
+                        )
+                      : cmbVal == "Propose Disetujui"
+                          ? Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height - 200,
+                                child: FutureBuilder(
+                                  future: fetchSetuju(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        return Text("Error! ${snapshot.error}");
+                                      } else if (snapshot.hasData) {
+                                        return DaftarPet(
+                                            snapshot.data.toString());
+                                      } else {
+                                        return const Text("No data");
+                                      }
+                                    } else {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          : Text(""),
               //   ],
               // ),
             ],
@@ -161,7 +161,7 @@ class AdoptState extends State<Adopt> {
       itemCount: listPet2.length,
       itemBuilder: (BuildContext context, int index) {
         if (listPet2[index].adopter != null) {
-          adopter = ", adopter = " + listPet2[index].adopter.toString();
+          adopter = ", Adopter: " + listPet2[index].adopter.toString();
         }
 
         return Card(
@@ -175,7 +175,7 @@ class AdoptState extends State<Adopt> {
                         "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
                     title: Text(listPet2[index].nama.toString()),
                     subtitle: Text(
-                        "${listPet2[index].keterangan}\nlikes: ${listPet2[index].likes}$adopter"),
+                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}$adopter"),
                   )
                 ],
               ),

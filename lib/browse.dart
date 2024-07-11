@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:adopt_uas/propose.dart';
@@ -15,6 +16,7 @@ class Browse extends StatefulWidget {
 }
 
 class BrowseState extends State<Browse> {
+  Pets? _pets;
   @override
   void initState() {
     super.initState();
@@ -64,7 +66,7 @@ class BrowseState extends State<Browse> {
     return ListView.builder(
       itemCount: listPet2.length,
       itemBuilder: (BuildContext context, int index) {
-        return new Card(
+        return Card(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -72,10 +74,8 @@ class BrowseState extends State<Browse> {
                   leading: Image.network(
                       "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
                   title: Text(listPet2[index].nama),
-                  subtitle: Text(listPet2[index].keterangan +
-                      "\n" +
-                      "likes: " +
-                      listPet2[index].likes.toString()),
+                  subtitle: Text(
+                      "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}"),
                   trailing: ElevatedButton(
                     child: Text('Propose'),
                     onPressed: () {
@@ -87,7 +87,8 @@ class BrowseState extends State<Browse> {
                             username: widget.username,
                           ),
                         ),
-                      );
+                      ).then(onGoBack);
+                      ;
                     },
                   ))
             ],
@@ -108,5 +109,19 @@ class BrowseState extends State<Browse> {
     } else {
       throw Exception("Failed to read API");
     }
+  }
+
+  Future onGoBack(dynamic value) async {
+    setState(() {
+      bacaData();
+    });
+  }
+
+  bacaData() {
+    fetchData().then((value) {
+      Map json = jsonDecode(value);
+      _pets = Pets.fromJson(json['data']);
+      setState(() {});
+    });
   }
 }
