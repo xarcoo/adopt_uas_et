@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:adopt_uas/class/Pets.dart';
 import 'package:adopt_uas/decision.dart';
 import 'package:adopt_uas/editOffer.dart';
+import 'package:adopt_uas/main.dart';
 import 'package:adopt_uas/newOffer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -176,7 +177,7 @@ class OfferState extends State<Offer> {
       return new ElevatedButton(
         child: Text('Delete'),
         onPressed: () {
-          delete(index);
+          delete(listPet2, index);
         },
       );
     } else {
@@ -221,21 +222,21 @@ class OfferState extends State<Offer> {
     });
   }
 
-  void delete(id) async {
+  void delete(List<Pets> listPet2, id) async {
     final response = await http.post(
-        Uri.parse("https://ubaya.me/flutter/160421050/uas/delete_pet.php"),
-        body: {'id': id.toString()});
+      Uri.parse("https://ubaya.me/flutter/160421050/uas/delete_pet.php"),
+      body: {'id': listPet2[id].id.toString()},
+    );
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         if (!mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menghapus Data')));
+        Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => Offer(username: widget.username),
-          ),
+          MaterialPageRoute(builder: (context) => MainApp()),
         );
       }
     } else {
