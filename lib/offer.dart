@@ -233,11 +233,13 @@ class OfferState extends State<Offer> {
         if (!mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menghapus Data')));
+
+        // bacaData();
         Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MainApp()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => MainApp()),
+        // );
       }
     } else {
       ScaffoldMessenger.of(context)
