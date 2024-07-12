@@ -160,10 +160,6 @@ class AdoptState extends State<Adopt> {
     return ListView.builder(
       itemCount: listPet2.length,
       itemBuilder: (BuildContext context, int index) {
-        if (listPet2[index].adopter != null) {
-          adopter = ", Adopter: " + listPet2[index].adopter.toString();
-        }
-
         return Card(
           child: Padding(
             padding: EdgeInsets.only(top: 5),
@@ -175,7 +171,7 @@ class AdoptState extends State<Adopt> {
                         "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
                     title: Text(listPet2[index].nama.toString()),
                     subtitle: Text(
-                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}$adopter"),
+                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}$adopter${listPet2[index].adopter != null ? ', Adopter: ${listPet2[index].adopter.toString()}' : ''}"),
                   )
                 ],
               ),

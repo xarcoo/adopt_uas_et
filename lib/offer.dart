@@ -74,7 +74,6 @@ class OfferState extends State<Offer> {
     return ListView.builder(
       itemCount: listPet2.length,
       itemBuilder: (BuildContext context, int index) {
-
         return Card(
           child: Padding(
             padding: EdgeInsets.only(top: 5),
@@ -86,7 +85,7 @@ class OfferState extends State<Offer> {
                         "https://ubaya.me/flutter/160421050/uas/images/${listPet2[index].id}.jpg"),
                     title: Text(listPet2[index].nama.toString()),
                     subtitle: Text(
-                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}, ${listPet2[index].adopter != null ? ', Adopter: ${listPet2[index].adopter.toString()}' : ''}"),
+                        "${listPet2[index].keterangan}\nProposer: ${listPet2[index].likes}${listPet2[index].adopter != null ? ', Adopter: ${listPet2[index].adopter.toString()}' : ''}"),
                     trailing: Padding(
                       padding: EdgeInsets.all(10),
                       child: Row(
